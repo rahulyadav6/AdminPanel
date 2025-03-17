@@ -1,5 +1,6 @@
 import Product from "../models/product.model.js";
 
+// Get all product
 export const getProducts = async(req,res)=>{
     try{
         const products = await Product.find({});
@@ -10,6 +11,7 @@ export const getProducts = async(req,res)=>{
     }
 }
 
+// Add a product
 export const addProduct = async(req, res)=>{
     const product = req.body;
     console.log(product);
@@ -33,6 +35,8 @@ export const addProduct = async(req, res)=>{
     }
 }
 
+
+// Update a product 
 export const updateProduct = async(req,res)=>{
     const {id} = req.params;
     const product = req.body;
@@ -49,8 +53,13 @@ export const updateProduct = async(req,res)=>{
     }
 }
 
+// Delete a product
 export const deleteProduct = async(req,res)=>{
     const {id} = req.params;
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({success:false, message:"Invalid Product Id"});
+    }
+    
     try{
         const response = await Product.findByIdAndDelete(id);
         if(!response){
@@ -58,6 +67,6 @@ export const deleteProduct = async(req,res)=>{
         }
         res.status(200).json({success: true, message: "Product deleted"});
     }catch(error){
-        res.status(404).json({success:false, message: "Product not found"});
+        res.status(500).json({success:false, message: "Server Error"});
     }
 }
