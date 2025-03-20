@@ -14,7 +14,6 @@ export const getProducts = async(req,res)=>{
 // Add a product
 export const addProduct = async(req, res)=>{
     const product = req.body;
-    console.log(product);
     if(!product.name || !product.price || !product.image){
         return res.status(400).json({
             success: false,
