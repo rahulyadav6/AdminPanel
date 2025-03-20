@@ -1,11 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Card from '../components/Card'
+import axios from 'axios';
+import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('/api/products');
+        const products = response.data.data;
+        setProducts(products); 
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
+  
+  console.log(products);
   return (
-    <section className='min-h-screen dark:bg-slate-700 </section>'>
-        <main className='max-w-7xl mx-auto px-4 py-36'>
+    <section className='min-h-screen dark:bg-slate-700'>
+        <main className='sm:mx-auto px-14 py-36 space-y-10'>
             <div>
-                <h1 className='text-5xl dark:text-white text-center'>Home page</h1>
+              <h2 className='sm:text-5xl text-xl font-bold dark:text-white text-center'>Current Products</h2>
+            </div>
+            <div className='grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6  2xl:grid-cols-5'>
+              {products ?
+                products.map((product) => (
+                  <Card key={product._id} product={product} />
+                ))
+                :
+                <div>
+                  <h1>No available products</h1>
+                  <Link to={"/create"}>
+                      Add Product here
+                  </Link>
+                </div>
+              }
             </div>
         </main>
     </section>
