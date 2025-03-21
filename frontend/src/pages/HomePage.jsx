@@ -19,9 +19,15 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
-  const handleProductDelete = (productId) => {
-    // Update the UI by filtering out the deleted product
-    setProducts(products.filter(product => product._id !== productId));
+  const handleProductDelete = async (productId) => {
+    try {
+      await axios.delete(`/api/products/${productId}`);
+      setProducts( products.filter((product) =>(
+        product._id !== productId
+      )));
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
   
   return (

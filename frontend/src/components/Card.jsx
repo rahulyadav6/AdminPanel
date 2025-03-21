@@ -1,15 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import axios from 'axios';
+
 
 const Card = ({ product, onDelete }) => {
-  const handleDelete = async () => {
-    try {
-      await axios.delete(`/api/products/${product._id}`);
-      onDelete(product._id); // Call the onDelete function passed from the parent component
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const handleDeleteConfirm = async () => {
+      onDelete(product._id);
+      setShowDeleteConfirm(false);
   };
 
   return (
@@ -28,10 +25,34 @@ const Card = ({ product, onDelete }) => {
           <FaEdit className="mr-1" /> Edit
         </button>
         <button className="flex items-center text-red-500 hover:underline" 
-          onClick={handleDelete}>
+          onClick={() => setShowDeleteConfirm(true)}
+          >
           <FaTrash className="mr-1" /> Delete
         </button>
       </div>
+
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md">
+            <h3 className="text-lg font-medium mb-4 dark:text-white">Confirm Delete</h3>
+            <p className="dark:text-gray-300">Are you sure you want to delete {product.name}?</p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 dark:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
