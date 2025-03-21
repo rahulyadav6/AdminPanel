@@ -1,4 +1,5 @@
 import Product from "../models/product.model.js";
+import mongoose from "mongoose";
 
 // Get all product
 export const getProducts = async(req,res)=>{

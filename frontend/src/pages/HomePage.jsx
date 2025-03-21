@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../components/Card'
 import axios from 'axios';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -18,8 +18,12 @@ const HomePage = () => {
     };
     fetchProducts();
   }, []);
+
+  const handleProductDelete = (productId) => {
+    // Update the UI by filtering out the deleted product
+    setProducts(products.filter(product => product._id !== productId));
+  };
   
-  console.log(products);
   return (
     <section className='min-h-screen dark:bg-slate-700'>
         <main className='sm:mx-auto px-14 py-36 space-y-10'>
@@ -29,7 +33,11 @@ const HomePage = () => {
             <div className='grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6  2xl:grid-cols-5'>
               {products ?
                 products.map((product) => (
-                  <Card key={product._id} product={product} />
+                  <Card 
+                    key={product._id} 
+                    product={product} 
+                    onDelete={handleProductDelete}
+                    />
                 ))
                 :
                 <div>
