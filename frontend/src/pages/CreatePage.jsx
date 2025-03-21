@@ -1,17 +1,38 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import { useParams } from 'react-router-dom';
 
 const CreatePage = () => {
     const [isClicked, setIsClicked] = useState(false);
     const [notification, setNotification] = useState('');
+    const { productId } = useParams();
     const [formData, setFormData] = useState({
         productName: "",
         price: "",
         imageUrl: ""
     })
+
+    useEffect(()=>{
+        if(productId) {
+            const fetchProduct = async ()=>{
+                try{
+                    const response = await axios.get(`/api/products/${productId}`);
+                    const product = response.data.data;
+                    setFormData({
+                        productName: product.name,
+                        price: product.price,
+                        imageUrl: product.image
+                    });
+                }catch(error){
+                    console.error("Error fetching product: ", error);
+                }
+            }
+            fetchProduct();
+        };
+    },[productId]);
     const handleChange = (e)=>{
         setFormData({
             ...formData,

@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 
-const Card = ({ product, onDelete }) => {
+const Card = ({ product, onDelete, onEdit }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const handleDeleteConfirm = async () => {
       onDelete(product._id);
       setShowDeleteConfirm(false);
   };
+
+  const handleEditClick = async () => {
+    onEdit(product._id);
+  }
 
   return (
     <div className="border rounded-lg shadow-2xl bg-bl">
@@ -19,9 +23,11 @@ const Card = ({ product, onDelete }) => {
         </div>
       )}
       <h2 className="text-xl font-bold mt-2 px-4 dark:text-white">{product.name}</h2>
-      <p className="text-gray-700 px-4">${product.price}</p>
+      <p className="text-gray-700 dark:text-white px-4">${product.price}</p>
       <div className="m-3 flex justify-between px-2">
-        <button className="flex items-center text-blue-500 hover:underline">
+        <button className="flex items-center text-blue-500 hover:underline"
+          onClick={handleEditClick}
+        >
           <FaEdit className="mr-1" /> Edit
         </button>
         <button className="flex items-center text-red-500 hover:underline" 

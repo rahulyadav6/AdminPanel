@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../components/Card'
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate()
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -29,6 +30,11 @@ const HomePage = () => {
       console.error("Error deleting product:", error);
     }
   };
+
+
+  const handleEditProduct = async (productId) =>{
+    navigate(`/create/${productId}`);
+  }
   
   return (
     <section className='min-h-screen dark:bg-slate-700'>
@@ -43,6 +49,7 @@ const HomePage = () => {
                     key={product._id} 
                     product={product} 
                     onDelete={handleProductDelete}
+                    onEdit={handleEditProduct}
                     />
                 ))
                 :

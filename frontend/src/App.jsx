@@ -13,6 +13,7 @@ function App() {
         <Routes>
           <Route path='/'  element={<HomePage /> }/>
           <Route path='/create'  element={<CreatePage /> }/>
+          <Route path='/create/:productId'  element={<CreatePage /> }/>
         </Routes>
       </BrowserRouter>
     </div>
