@@ -3,7 +3,7 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 const CreatePage = () => {
     const [isClicked, setIsClicked] = useState(false);
@@ -14,6 +14,8 @@ const CreatePage = () => {
         price: "",
         imageUrl: ""
     })
+
+    const navigate = useNavigate();
 
     useEffect(()=>{
         if(productId) {
@@ -43,21 +45,29 @@ const CreatePage = () => {
         e.preventDefault();
         setIsClicked(true);
         try{
-            const response = await axios.post("/api/products",{
-                name: formData.productName,
-                price: formData.price,
-                image: formData.imageUrl
-            });
-            toast.success('Product added successfully!', { theme: "dark" });
+            if(productId){
+                await axios.put(`/api/products/${productId}`, {
+                    name: formData.productName,
+                    price: formData.price,
+                    image: formData.imageUrl
+                });
+            }else{
+                const response = await axios.post("/api/products",{
+                    name: formData.productName,
+                    price: formData.price,
+                    image: formData.imageUrl
+                });
+            }
             setFormData({
                 productName: "",
                 price: "",
                 imageUrl: ""
             });
             setIsClicked(false);
+            toast.success('Product added successfully!', { theme: "dark" });
         }catch(error){
-            console.error("Success: false, Error:", error);
-            toast.error('Failed to add product.', { theme: "dark" });
+            console.error("Error saving product:", error);
+            toast.error('Failed to save product.', { theme: "dark" });
         };
     }
   return (
@@ -128,12 +138,12 @@ const CreatePage = () => {
                             />
                         </div>
                         {/* button */}
-                        <div className='w-full flex justify-center items-center '>
+                        <div className='w-full flex justify-center items-center'>
                             <button
                                 type='submit'
                                 className={`w-1/3 flex justify-center py-3 px-4 mt-1 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-green-600 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-150 hover:scale-[1.02]`}
                                 onClick={handleAddProduct}
-                            >Add Product</button>
+                            >{productId ? 'Update Product': 'Add Product'}</button>
                         </div>
                     </div>
                 </form>
