@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import Themetoggle from "./Themetoggle";
+import Themetoggle from "./Themetoggle.jsx";
 import { CiSquarePlus } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 
